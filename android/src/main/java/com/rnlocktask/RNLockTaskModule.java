@@ -52,6 +52,14 @@ public class RNLockTaskModule extends ReactContextBaseJavaModule {
       }
     }
   }
+  
+  
+  @ReactMethod
+  public  void removeDPM() {
+    Activity mActivity = reactContext.getCurrentActivity();
+    DevicePolicyManager dpm = (DevicePolicyManager) mActivity.getSystemService(Context.DEVICE_POLICY_SERVICE);
+    dpm.clearDeviceOwnerApp(mActivity.getPackageName());
+  }
 
   @ReactMethod
   public  void stopLockTask() {
