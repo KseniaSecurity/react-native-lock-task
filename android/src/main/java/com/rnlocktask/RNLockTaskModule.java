@@ -7,6 +7,7 @@ import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
 
+import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
@@ -52,19 +53,19 @@ public class RNLockTaskModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public Boolean isPinned() {
+    public void isPinned(Promise promise) {
         Activity mActivity = getCurrentActivity();
         ActivityManager am = (ActivityManager) mActivity.getSystemService(Context.ACTIVITY_SERVICE);
-        return android.os.Build.VERSION.SDK_INT >= 23 && am.getLockTaskModeState() ==
-                ActivityManager.LOCK_TASK_MODE_PINNED;
+        promise.resolve(android.os.Build.VERSION.SDK_INT >= 23 && am.getLockTaskModeState() ==
+                ActivityManager.LOCK_TASK_MODE_PINNED);
     }
 
     @ReactMethod
-    public Boolean isLocked() {
+    public void isLocked(Promise promise) {
         Activity mActivity = getCurrentActivity();
         ActivityManager am = (ActivityManager) mActivity.getSystemService(Context.ACTIVITY_SERVICE);
-        return android.os.Build.VERSION.SDK_INT >= 23 && am.getLockTaskModeState() ==
-                ActivityManager.LOCK_TASK_MODE_LOCKED;
+        promise.resolve(android.os.Build.VERSION.SDK_INT >= 23 && am.getLockTaskModeState() ==
+                ActivityManager.LOCK_TASK_MODE_LOCKED);
     }
 
     @ReactMethod
