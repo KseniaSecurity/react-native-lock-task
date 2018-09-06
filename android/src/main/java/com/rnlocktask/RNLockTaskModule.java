@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.support.annotation.Nullable;
 
+import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
@@ -56,24 +57,22 @@ public class RNLockTaskModule extends ReactContextBaseJavaModule {
         }
     }
 
-    @Override
-    public Map<String, Object> getConstants() {
+    @ReactMethod
+    public void isLocked(Promise promise) {
         Activity mActivity = getCurrentActivity();
         ActivityManager am = (ActivityManager) mActivity.getSystemService(Context.ACTIVITY_SERVICE);
-
-        HashMap<String, Object> constants = new HashMap<String, Object>();
-
-        PackageManager packageManager = this.reactContext.getPackageManager();
-        String packageName = this.reactContext.getPackageName();
-
-        constants.put("locked", android.os.Build.VERSION.SDK_INT >= 23 && am.getLockTaskModeState() ==
+        promise.resolve(android.os.Build.VERSION.SDK_INT >= 23 && am.getLockTaskModeState() ==
                 ActivityManager.LOCK_TASK_MODE_LOCKED);
-        constants.put("pinned", android.os.Build.VERSION.SDK_INT >= 23 && am.getLockTaskModeState() ==
-                ActivityManager.LOCK_TASK_MODE_PINNED);
-
-        return constants;
     }
 
+    @ReactMethod
+    public void isPinned(Promise promise) {
+        Activity mActivity = getCurrentActivity();
+        ActivityManager am = (ActivityManager) mActivity.getSystemService(Context.ACTIVITY_SERVICE);
+        promise.resolve(android.os.Build.VERSION.SDK_INT >= 23 && am.getLockTaskModeState() ==
+                ActivityManager.LOCK_TASK_MODE_PINNED);
+    }
+    
     @ReactMethod
     public void stopLockTask() {
         Activity mActivity = getCurrentActivity();
