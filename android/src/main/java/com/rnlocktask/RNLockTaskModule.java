@@ -6,8 +6,10 @@ import android.app.ActivityManager;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.pm.PackageInstaller;
 import android.content.pm.PackageManager;
 import android.support.annotation.Nullable;
+import android.view.View;
 
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -32,7 +34,7 @@ public class RNLockTaskModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void startLockTask() {
+    public void startLockTask(Boolean fullScreenMode) {
         Activity mActivity = getCurrentActivity();
         if (mActivity != null) {
             DevicePolicyManager myDevicePolicyManager = (DevicePolicyManager) mActivity
@@ -53,6 +55,8 @@ public class RNLockTaskModule extends ReactContextBaseJavaModule {
                 String[] packages = {mActivity.getPackageName()};
                 myDevicePolicyManager.setLockTaskPackages(mDPM, packages);
                 mActivity.startLockTask();
+                if (fullScreenMode)
+                    hideSystemUI();
             }
         }
     }
@@ -72,12 +76,27 @@ public class RNLockTaskModule extends ReactContextBaseJavaModule {
         promise.resolve(android.os.Build.VERSION.SDK_INT >= 23 && am.getLockTaskModeState() ==
                 ActivityManager.LOCK_TASK_MODE_PINNED);
     }
-    
+
     @ReactMethod
     public void stopLockTask() {
         Activity mActivity = getCurrentActivity();
         if (mActivity != null && android.os.Build.VERSION.SDK_INT >= 21) {
             mActivity.stopLockTask();
+            showSystemUI();
         }
     }
+
+    private void hideSystemUI() {
+        getCurrentActivity().getWindow().getDecorView()
+                .setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+    }
+
+    private void showSystemUI() {
+        getCurrentActivity().getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+    }
+
 }
