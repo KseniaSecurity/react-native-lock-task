@@ -10,6 +10,7 @@ import android.content.pm.PackageInstaller;
 import android.content.pm.PackageManager;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.view.WindowManager;
 
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -41,14 +42,14 @@ public class RNLockTaskModule extends ReactContextBaseJavaModule {
                     .getSystemService(Context.DEVICE_POLICY_SERVICE);
             ComponentName mDPM = new ComponentName(mActivity, MyAdmin.class);
 
-        /* mActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN |
-                        WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
-                        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
-                        WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON,
-                        WindowManager.LayoutParams.FLAG_FULLSCREEN |
-                        WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
-                        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
-                        WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON); */
+            mActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN |
+                            WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
+                            WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
+                            WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN |
+                            WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
+                            WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
+                            WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
             if (android.os.Build.VERSION.SDK_INT >= 21 &&
                     myDevicePolicyManager.isDeviceOwnerApp(mActivity.getPackageName())) {
