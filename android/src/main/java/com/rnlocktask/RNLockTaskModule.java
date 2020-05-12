@@ -74,4 +74,13 @@ public class RNLockTaskModule extends ReactContextBaseJavaModule {
             mActivity.stopLockTask();
         }
     }
+
+    @ReactMethod
+    public void removeOwner() {
+        Activity mActivity = getCurrentActivity();
+        if (mActivity != null && android.os.Build.VERSION.SDK_INT >= 21) {
+            DevicePolicyManager dpm = (DevicePolicyManager) reactContext.getSystemService(Context.DEVICE_POLICY_SERVICE);
+            dpm.clearDeviceOwnerApp(reactContext.getPackageName());
+        }
+    }
 }

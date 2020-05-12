@@ -90,4 +90,5 @@ RNLockTask.startLockTask();
 RNLockTask.stopLockTask();
 RNLockTask.isPinned();
 RNLockTask.isLocked();
+RNLockTask.removeOwner();
 ```
